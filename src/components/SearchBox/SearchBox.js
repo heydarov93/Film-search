@@ -14,8 +14,8 @@ class SearchBox extends Component {
   searchBoxSubmitHandler = (e) => {
     e.preventDefault();
     fetchBySearch(this.state.searchLine).then((data) => {
-        console.log(data.Search)
-      this.props.setMovies(data.Search);
+      console.log(data);
+      this.props.setSearched(data.Search);
     });
   };
 

@@ -7,12 +7,37 @@ import Favorites from "../../components/Favorites/Favorites";
 
 class MainPage extends Component {
   state = {
-    movies: [],
+    searched: {
+      movies: [],
+    },
+    favorites: {
+      movies: [],
+    },
   };
 
-  setMovies = (data) => {
-    this.setState({ movies: data });
-  }
+  // store searched movies
+  setSearched = (data) => {
+    this.setState({ searched: { movies: data } });
+  };
+
+  // add movies into favorites list
+  setFavorites = (id) => {
+    const searched = this.state.searched.movies;
+    const favorites = this.state.favorites.movies;
+    const data = searched.find((movie) => movie.imdbID === id);
+    const alreadyAdded = favorites.find((movie) => movie.imdbID === id);
+    if (!alreadyAdded)
+      this.setState({ favorites: { movies: [...favorites, data] } });
+  };
+
+  // remove movie from favorites
+  removeFavorite = (id) => {
+    const favorites = this.state.favorites.movies.filter(
+      (movie) => movie.imdbID !== id
+    );
+
+    this.setState({ favorites: { movies: favorites } });
+  };
 
   render() {
     return (
@@ -21,14 +46,20 @@ class MainPage extends Component {
         <main className="main-page__content">
           <section className="main-page__main-section">
             <div className="main-page__search-box">
-              <SearchBox setMovies={this.setMovies} />
+              <SearchBox setSearched={this.setSearched} />
             </div>
             <div className="main-page__movies">
-              <Movies movies={this.state.movies} />
+              <Movies
+                movies={this.state.searched.movies}
+                setFavorites={this.setFavorites}
+              />
             </div>
           </section>
           <aside className="main-page__favorites">
-            <Favorites />
+            <Favorites
+              favorites={this.state.favorites.movies}
+              removeFavorite={this.removeFavorite}
+            />
           </aside>
         </main>
       </div>
