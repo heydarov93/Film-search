@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import "./Favorites.css";
 import { postFavoritesList } from "../../api/PostList";
-import { Link } from "react-router-dom";
+import CreateListButton from "../CreateListButton";
 
 class Favorites extends Component {
   state = {
     title: "",
     showLinkToList: false,
+    listId: "",
   };
 
   // set title for favorite films
@@ -18,22 +19,14 @@ class Favorites extends Component {
   // post favorite list into api
   saveList = (e) => {
     e.preventDefault();
-    const id1 = Math.floor(Math.random() * 99999) + 1;
-    const id2 = Math.floor(Math.random() * 99999) + 1;
-    const id3 = Math.floor(Math.random() * 99999) + 1;
-
-    const list = {
-      title: this.state.title,
-      movies: this.props.favorites,
-      id: `${id1}${id2}${id3}`,
-    };
-
-    if (postFavoritesList(list)) {
-      this.setState({
-        showLinkToList: !this.state.showLinkToList,
-        listId: list.id,
-      });
-    }
+    const movies = { title: this.state.title, movies: this.props.favorites };
+    postFavoritesList(movies).then((postedData) => {
+      if (postedData) {
+      }
+    });
+    this.setState({
+      showLinkToList: !this.state.showLinkToList,
+    });
   };
 
   render() {
@@ -70,18 +63,7 @@ class Favorites extends Component {
             );
           })}
         </ul>
-        {this.state.showLinkToList ? (
-          <Link to={`/list/${this.state.listId}`}>Перейти к списку</Link>
-        ) : (
-          <button
-            type="button"
-            className="favorites__save"
-            onClick={this.saveList}
-            disabled={disabled}
-          >
-            Сохранить список
-          </button>
-        )}
+        <CreateListButton />
       </div>
     );
   }
