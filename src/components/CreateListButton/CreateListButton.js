@@ -1,22 +1,25 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 class CreateListButton extends React.Component {
-render() {
-    return (
-        
-            // <Link to={`/list/${this.state.listId}`}>Перейти к списку</Link>
-        
-            // <button
-            //   type="button"
-            //   className="favorites__save"
-            //   onClick={this.saveList}
-            //   disabled={disabled}
-            // >
-            //   Сохранить список
-            // </button>
-        
-    )
-    }
+  render() {
+    const { onClick, listId, disabled, text } = this.props;
+
+    return !listId ? (
+      <button
+        type="button"
+        className="favorites__save"
+        onClick={onClick}
+        disabled={disabled}
+      >
+        {text}
+      </button>
+    ) : (
+      <Link target="_blank" to={`/list/${listId}`}>
+        Перейти к списку
+      </Link>
+    );
+  }
 }
 
 export default CreateListButton;

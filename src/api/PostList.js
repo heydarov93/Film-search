@@ -9,10 +9,10 @@ export async function postFavoritesList(postData) {
       },
       body: JSON.stringify(postData),
     });
-    const data = await response.json();
 
-    console.log(data);
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error("User xetasi: ", error);
+    console.error("User error: ", error);
   }
 }

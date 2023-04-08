@@ -14,8 +14,6 @@ export async function fetchBySearch(searchText) {
 
     return data;
   } catch (error) {
-    console.error("User xetasi: ", error);
+    console.error("User error: ", error);
   }
 }
-
-

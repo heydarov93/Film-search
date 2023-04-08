@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./SearchBox.css";
-import { fetchBySearch } from "../../api/FetchData";
+import { fetchBySearch } from "../../api/fetchData";
 
 class SearchBox extends Component {
   state = {
@@ -14,7 +14,6 @@ class SearchBox extends Component {
   searchBoxSubmitHandler = (e) => {
     e.preventDefault();
     fetchBySearch(this.state.searchLine).then((data) => {
-      console.log(data);
       this.props.setSearched(data.Search);
     });
   };

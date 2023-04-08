@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import "./Favorites.css";
-import { postFavoritesList } from "../../api/PostList";
-import CreateListButton from "../CreateListButton";
+import { postFavoritesList } from "../../api/postList";
+import CreateListButton from "../CreateListButton/CreateListButton";
 
 class Favorites extends Component {
   state = {
     title: "",
-    showLinkToList: false,
     listId: "",
+    dataIsSent: false,
   };
 
   // set title for favorite films
@@ -20,22 +20,24 @@ class Favorites extends Component {
   saveList = (e) => {
     e.preventDefault();
     const movies = { title: this.state.title, movies: this.props.favorites };
+
     postFavoritesList(movies).then((postedData) => {
       if (postedData) {
+        this.setState({ listId: postedData.id });
+        this.setState({ dataIsSent: !this.state.dataIsSent });
       }
-    });
-    this.setState({
-      showLinkToList: !this.state.showLinkToList,
     });
   };
 
   render() {
     const { favorites, removeFavorite } = this.props;
-    const { title } = this.state;
+    const { title, dataIsSent } = this.state;
 
     // if title empty make the button disabled
     const disabled = !title.trim();
 
+    // set button's text according process
+    const text = dataIsSent ? "Идет загрузка" : "Сохранить список";
     return (
       <div className="favorites">
         <input
@@ -44,6 +46,7 @@ class Favorites extends Component {
           placeholder="Введите название списка"
           name="title"
           onChange={this.onChange}
+          disabled={this.state.dataIsSent}
         />
         <ul className="favorites__list">
           {favorites.map((item) => {
@@ -52,6 +55,7 @@ class Favorites extends Component {
                 {item.Title} ({item.Year})
                 <button
                   type="button"
+                  disabled={this.state.dataIsSent}
                   onClick={(e) => {
                     e.preventDefault();
                     removeFavorite(item.imdbID);
@@ -63,7 +67,12 @@ class Favorites extends Component {
             );
           })}
         </ul>
-        <CreateListButton />
+        <CreateListButton
+          onClick={this.saveList}
+          listId={this.state.listId || null}
+          disabled={disabled}
+          text={text}
+        />
       </div>
     );
   }
